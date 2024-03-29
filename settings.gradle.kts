@@ -16,4 +16,4 @@ pluginManagement {
     }
 }
 
-include(":shared")
+include(":library")
