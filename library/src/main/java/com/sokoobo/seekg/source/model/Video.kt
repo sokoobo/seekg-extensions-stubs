@@ -1,8 +1,26 @@
-@file:Suppress("unused_parameter")
+@file:Suppress("UNUSED")
 
 package com.sokoobo.seekg.source.model
 
-/**
- * The instance that contains the data needed to watch a video.
- */
-data class Video(val url: String, val quality: String, var videoUrl: String?)
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class Video(
+    val url: String,
+    val quality: String,
+    var videoUrl: String?
+) {
+    @Transient
+    @Volatile
+    var status: State = State.QUEUE
+        set(value) {
+            field = value
+        }
+
+    enum class State {
+        QUEUE,
+        LOAD,
+        READY,
+        ERROR,
+    }
+}

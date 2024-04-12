@@ -1,4 +1,4 @@
-@file:Suppress("unused_parameter")
+@file:Suppress("UNUSED")
 
 package com.sokoobo.seekg.source
 
@@ -10,6 +10,7 @@ interface ProfileSource {
 
     val id: Long
     val name: String
+    val lang: String
     val versionId: Int
 
     suspend fun getProfileDetails(profile: SProfile): SProfile

@@ -55,6 +55,10 @@ android {
 
 dependencies {
     compileOnly(libs.okhttp)
+    compileOnly(libs.okhttp.dnsoverhttps)
+    compileOnly(libs.okhttp.brotli)
+    compileOnly(libs.okhttp.logging)
+    compileOnly(libs.jsandroid)
     compileOnly(libs.jsoup)
     compileOnly(libs.rxjava)
     compileOnly(libs.rxandroid)

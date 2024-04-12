@@ -1,4 +1,4 @@
-@file:Suppress("unused_parameter")
+@file:Suppress("UNUSED")
 
 package com.sokoobo.seekg.source.model
 

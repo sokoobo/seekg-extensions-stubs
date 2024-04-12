@@ -1,7 +1,8 @@
-@file:Suppress("unused_parameter")
+@file:Suppress("UNUSED")
 
 package com.sokoobo.seekg.source.online
 
+import com.sokoobo.seekg.network.GET
 import com.sokoobo.seekg.network.NetworkHelper
 import okhttp3.Headers
 import okhttp3.OkHttpClient
@@ -14,28 +15,52 @@ import com.sokoobo.seekg.source.model.ProfilesPage
 import com.sokoobo.seekg.source.model.SProfile
 import com.sokoobo.seekg.source.model.Video
 import okhttp3.Response
+import uy.kohesive.injekt.injectLazy
+import java.net.URI
+import java.net.URISyntaxException
+import java.security.MessageDigest
 
 abstract class ProfileHttpSource : ProfileCatalogueSource {
 
-    protected val network: NetworkHelper = throw Exception("Stub!")
+    protected val network: NetworkHelper by injectLazy()
     abstract val baseUrl: String
 
-    override val id: Long = throw Exception("Stub!")
-    override val name: String = throw Exception("Stub!")
-    override val versionId: Int = throw Exception("Stub!")
+    override val id: Long by lazy { generateId(name, lang, versionId) }
+    override val name: String = ""
+    override val versionId: Int = 1
 
-    val headers: Headers = throw Exception("Stub!")
+    val headers: Headers by lazy { headersBuilder().build() }
 
-    open val client: OkHttpClient = throw Exception("Stub!")
+    open val client: OkHttpClient get() = network.client
 
     // Common
-    protected abstract suspend fun headersBuilder(): Headers.Builder
-    protected abstract suspend fun getUrlWithoutDomain(orig: String): String
+    protected fun getUrlWithoutDomain(orig: String): String {
+        return try {
+            val uri = URI(orig)
+            var out = uri.path
+            if (uri.query != null) {
+                out += "?" + uri.query
+            }
+            if (uri.fragment != null) {
+                out += "#" + uri.fragment
+            }
+            out
+        } catch (e: URISyntaxException) {
+            orig
+        }
+    }
 
     // Requests
     protected abstract suspend fun createProfilesRequest(page: Int): Request
-    protected abstract suspend fun createProfilesRequest(page: Int, query: String, filters: ProfileFilterList): Request
-    protected abstract suspend fun createProfileRequest(profile: SProfile): Request
+    protected abstract suspend fun createProfilesRequest(
+        page: Int,
+        query: String,
+        filters: ProfileFilterList
+    ): Request
+
+    protected open fun createProfileRequest(profile: SProfile): Request {
+        return GET(baseUrl + profile.url, headers)
+    }
 
     // Responses
     protected abstract suspend fun getProfile(response: Response): SProfile
@@ -44,9 +69,7 @@ abstract class ProfileHttpSource : ProfileCatalogueSource {
     protected abstract suspend fun getVideoList(response: Response): List<Video>
 
     // Commons / Overrides
-    override fun toString(): String {
-        throw Exception("Stub!")
-    }
+    override fun toString() = "$name (${lang.uppercase()})"
 
     // ProfileSource / Overrides
     override suspend fun getProfileDetails(profile: SProfile): SProfile {
@@ -62,6 +85,17 @@ abstract class ProfileHttpSource : ProfileCatalogueSource {
     }
 
     // ProfileCatalogueSource / Overrides
+    override fun generateId(name: String, lang: String, versionId: Int): Long {
+        val key = "${name.lowercase()}/$lang/$versionId"
+        val bytes = MessageDigest.getInstance("MD5").digest(key.toByteArray())
+        return (0..7).map { bytes[it].toLong() and 0xff shl 8 * (7 - it) }
+            .reduce(Long::or) and Long.MAX_VALUE
+    }
+
+    protected open fun headersBuilder() = Headers.Builder().apply {
+        add("User-Agent", network.defaultUserAgentProvider())
+    }
+
     override suspend fun getProfiles(page: Int): ProfilesPage {
         throw Exception("Stub!")
     }
