@@ -47,7 +47,7 @@ abstract class WebViewInterceptor(
 
     fun parseHeaders(headers: Headers): Map<String, String> {
         return headers
-            // Keeping unsafe header makes webview throw [net::ERR_INVALID_ARGUMENT]
+            // Keeping unsafe header makes web view throw [net::ERR_INVALID_ARGUMENT]
             .filter { (name, value) ->
                 isRequestHeaderSafe(name, value)
             }
@@ -68,9 +68,9 @@ abstract class WebViewInterceptor(
 }
 
 // Based on [IsRequestHeaderSafe] in https://source.chromium.org/chromium/chromium/src/+/main:services/network/public/cpp/header_util.cc
-private fun isRequestHeaderSafe(_name: String, _value: String): Boolean {
-    val name = _name.lowercase(Locale.ENGLISH)
-    val value = _value.lowercase(Locale.ENGLISH)
+private fun isRequestHeaderSafe(sName: String, sValue: String): Boolean {
+    val name = sName.lowercase(Locale.ENGLISH)
+    val value = sValue.lowercase(Locale.ENGLISH)
     if (name in unsafeHeaderNames || name.startsWith("proxy-")) return false
     if (name == "connection" && value == "upgrade") return false
     return true
