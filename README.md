@@ -14,7 +14,7 @@ Just import add the library to your project with one of these options:
     <dependency>
         <groupId>com.github.sokoobo</groupId>
         <artifactId>seekg-extensions-stubs</artifactId>
-        <version>0.1.0</version>
+        <version>0.2.1</version>
     </dependency>
 ```
 
