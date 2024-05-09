@@ -18,18 +18,13 @@ class NetworkHelper(
     private val preferences: NetworkPreferences,
 ) {
 
-    fun client(cookieJar: CookieJar): OkHttpClient = run {
+    fun client(cookieJar: CookieJar, cache: Cache?): OkHttpClient = run {
         val builder = OkHttpClient.Builder()
             .cookieJar(cookieJar)
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .callTimeout(2, TimeUnit.MINUTES)
-            .cache(
-                Cache(
-                    directory = File(context.cacheDir, "network_cache"),
-                    maxSize = 5L * 1024 * 1024, // 5 MiB
-                ),
-            )
+            .cache(cache)
             .addInterceptor(BrotliInterceptor)
             .addInterceptor(UncaughtExceptionInterceptor())
             .addInterceptor(UserAgentInterceptor(::defaultUserAgentProvider))

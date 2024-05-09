@@ -2,9 +2,6 @@
 
 package com.sokoobo.seekg.source.model
 
-import kotlinx.serialization.Serializable
-
-@Serializable
 data class Video(
     val url: String,
     val quality: String,
