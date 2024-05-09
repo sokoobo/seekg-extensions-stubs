@@ -54,18 +54,18 @@ android {
 }
 
 dependencies {
-    compileOnly(libs.okhttp)
-    compileOnly(libs.okhttp.dnsoverhttps)
-    compileOnly(libs.okhttp.brotli)
-    compileOnly(libs.okhttp.logging)
+    compileOnly(libs.coroutines)
+    compileOnly(libs.injekt.core)
     compileOnly(libs.jsandroid)
     compileOnly(libs.jsoup)
-    compileOnly(libs.rxjava)
-    compileOnly(libs.rxandroid)
-    compileOnly(libs.injekt.core)
-    compileOnly(libs.coroutines)
     compileOnly(libs.kotlin.json)
     compileOnly(libs.kotlin.json.okio)
+    compileOnly(libs.okhttp)
+    compileOnly(libs.okhttp.brotli)
+    compileOnly(libs.okhttp.dnsoverhttps)
+    compileOnly(libs.okhttp.logging)
+    compileOnly(libs.rxandroid)
+    compileOnly(libs.rxjava)
 }
 
 tasks.register("androidSourcesJar", Jar::class) {

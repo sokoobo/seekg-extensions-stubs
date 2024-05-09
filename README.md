@@ -1,7 +1,7 @@
 # SeekG Extensions Stubs Library
 
 [![Telegram](/telegram.svg)](https://telegram.me/sokoobo)
-[![Jitpack](/seekg-extensions-stubs.svg)](https://jitpack.io/#sokoobo/seekg-extensions-stubs)
+[![Jitpack](https://jitpack.io/v/sokoobo/seekg-extensions-stubs.svg)](https://jitpack.io/#sokoobo/seekg-extensions-stubs)
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://github.com/sokoobo/seekg-extensions-stubs/blob/master/LICENSE)
 
 ## Usage

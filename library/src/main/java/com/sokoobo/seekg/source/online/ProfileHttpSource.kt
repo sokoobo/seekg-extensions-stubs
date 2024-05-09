@@ -14,6 +14,8 @@ import com.sokoobo.seekg.source.model.ProfileFilterList
 import com.sokoobo.seekg.source.model.ProfilesPage
 import com.sokoobo.seekg.source.model.SProfile
 import com.sokoobo.seekg.source.model.Video
+import okhttp3.Cache
+import okhttp3.CookieJar
 import okhttp3.Response
 import uy.kohesive.injekt.injectLazy
 import java.net.URI
@@ -29,9 +31,15 @@ abstract class ProfileHttpSource : ProfileCatalogueSource {
     override val name: String = ""
     override val versionId: Int = 1
 
-    val headers: Headers by lazy { headersBuilder().build() }
+    open val headers: Headers by lazy { headersBuilder().build() }
 
-    open val client: OkHttpClient get() = network.client
+    open fun client(cache: Cache? = null): OkHttpClient {
+        return network.client(CookieJar.NO_COOKIES, cache)
+    }
+
+    open fun client(cookieJar: CookieJar = CookieJar.NO_COOKIES, cache: Cache? = null): OkHttpClient {
+        return network.client(cookieJar, cache)
+    }
 
     // Common
     protected fun getUrlWithoutDomain(orig: String): String {
